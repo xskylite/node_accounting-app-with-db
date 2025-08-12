@@ -112,7 +112,7 @@ function createServer() {
           : categories.split(',');
 
         where.category =
-          cats.length === 1 ? cats[0] : { [require('sequelize').Op.in]: cats };
+          cats.length === 1 ? cats[0] : { [Op.in]: cats };
       }
 
       const expenses = await Expense.findAll({ where });
@@ -126,8 +126,13 @@ function createServer() {
   app.post('/expenses', async (req, res) => {
     const { userId, spentAt, title, amount, category, note } = req.body;
 
+    const parsedUserId = Number(userId);
+
+    if (isNaN(parsedUserId) || parsedUserId <= 0) {
+      return res.status(400).json({ message: 'Invalid userId' });
+    }
+
     if (
-      typeof userId !== 'number' ||
       typeof spentAt !== 'string' ||
       typeof title !== 'string' ||
       title.trim() === '' ||
