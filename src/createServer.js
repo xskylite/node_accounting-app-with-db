@@ -111,8 +111,7 @@ function createServer() {
           ? categories
           : categories.split(',');
 
-        where.category =
-          cats.length === 1 ? cats[0] : { [Op.in]: cats };
+        where.category = cats.length === 1 ? cats[0] : { [Op.in]: cats };
       }
 
       const expenses = await Expense.findAll({ where });
@@ -218,7 +217,7 @@ function createServer() {
     }
   });
 
-    app.get('/categories', async (req, res) => {
+  app.get('/categories', async (req, res) => {
     try {
       const categories = await Category.findAll();
 
